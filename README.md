@@ -2,6 +2,8 @@
 
 Welcome to the documentation for the data platform architecture of SoftCart, an ecommerce company. This document provides an overview of the tools, technologies, and processes involved in managing data for SoftCart's operations.
 
+![data_platform_architecture](https://github.com/harsh0701Xd/SoftCart-Data-Management-and-Analytics-Platform/assets/89227170/2c507d6e-bf59-4bad-91dd-254e3efc7a00)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
