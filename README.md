@@ -78,7 +78,49 @@ CREATE TABLE sales_data (
 ---
   
 ## NoSQL Database - MongoDB
-...
+
+### Overview
+
+SoftCart utilizes MongoDB as its NoSQL database to store e-commerce catalog data.
+
+### Tools / Software
+
+- MongoDB Server
+- MongoDB Command Line Backup Tools
+
+### Exercise 1 - Check the system environment
+
+- Before proceeding with the assignment, check if you have the `mongoimport` and `mongoexport` installed on the lab, otherwise install them.
+- Download the `catalog.json` file from [here](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/nosql/catalog.json).
+
+### Exercise 2 - Working with MongoDB
+
+- Import `catalog.json` into MongoDB server into a database named `catalog` and a collection named `electronics`.
+  ```
+  mongoimport --db catalog --collection electronics --file catalog.json --username root --password MTQyNDktaGFyc2hy --authenticationDatabase admin
+  ```
+- Create an index on the field “type”
+  ```
+  db.electronics.createIndex({ "type": 1 })
+  ```
+- Write a query to find the count of laptops
+  ```
+  db.electronics.count({ "type": "laptop"})
+  ```
+- Write a query to find the number of smartphones with a screen size of 6 inches
+  ```
+  db.electronics.count({ "type": "smart phone"},{"screen size": "6"})
+  ```
+- Write a query to find out the average screen size of smartphones
+  ```
+  db.electronics.aggregate([{$match: { "type": "smart phone" }},{$group: {_id: "$type",average_screen_size: { $avg: "$screen size" }}}])
+  ```
+- Export the fields `_id`, “type”, “model”, from the `electronics` collection into a file named `electronics.csv`
+  ```
+  mongoexport --host localhost --port 27017 --authenticationDatabase admin --username root --password MTQyNDktaGFyc2hy --db catalog --collection electronics --fields _id,type,model --out electronics.csv
+  ```
+
+---
 
 ## Production Data Warehouse - DB2 on Cloud
 ...
