@@ -132,7 +132,7 @@ SoftCart utilizes MongoDB as its NoSQL database to store e-commerce catalog data
 
 ### Overview
 
-SoftCart.com, an e-commerce company, aims to create a data warehouse to generate reports on total sales per year per country, total sales per month per category, total sales per quarter per country, and total sales per category per country.
+SoftCart.com aims to create a data warehouse to generate reports on total sales per year per country, total sales per month per category, total sales per quarter per country, and total sales per category per country.
 
 ### Tools / Software
 
@@ -247,10 +247,93 @@ SoftCart.com, an e-commerce company, aims to create a data warehouse to generate
 ---
 
 ## Business Intelligence Dashboard - IBM Cognos Analytics
-...
+
+- [Dataset link](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/analytics/ecommerce.csv)
+- [Dashboard link](https://us3.ca.analytics.ibm.com/bi/?perspective=dashboard&pathRef=.my_folders%2FEcommerce%2BDashboard&action=view&mode=dashboard&subView=model0000018f77682bc3_00000002)
+
+![image](https://github.com/harsh0701Xd/SoftCart-Data-Management-and-Analytics-Platform/assets/89227170/7b7c3c78-e36f-4864-aceb-c37fee55fa97)
 
 ## Data Pipelines - Apache Airflow
-...
+
+### Overview
+
+In this assignment, you will author an Apache Airflow DAG to analyze a web server log file. The pipeline will extract required lines ending with html, extract specific fields (time stamp, size), transform the data (bytes to mb), and load it by appending to an existing file.
+
+### Software Used
+
+- Apache Airflow
+
+### Exercise 1 - Prepare the Lab Environment
+
+Before starting the assignment:
+
+- Start Apache Airflow.
+- Download the dataset from the source and place it in the destination directory mentioned below:
+  - **Source**: [accesslog.txt](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/ETL/accesslog.txt)
+  - **Destination**: `/home/project/airflow/dags/capstone`
+
+### Exercise 2 - Create a DAG
+
+#### Task 1 - Define the DAG arguments
+
+Create a DAG with the specified arguments.
+
+**Screenshot:** [dag_args.jpg]
+
+#### Task 2 - Define the DAG
+
+Create a DAG named `process_web_log` that runs daily.
+
+**Screenshot:** [dag_definition.jpg]
+
+#### Task 3 - Create a task to extract data
+
+Create a task named `extract_data` to extract the `ipaddress` field from the web server log file and save it into a file named `extracted_data.txt`.
+
+**Screenshot:** [extract_data.jpg]
+
+#### Task 4 - Create a task to transform the data in the txt file
+
+Create a task named `transform_data` to filter out occurrences of `ipaddress` "198.46.149.143" from `extracted_data.txt` and save the output to a file named `transformed_data.txt`.
+
+**Screenshot:** [transform_data.jpg]
+
+#### Task 5 - Create a task to load the data
+
+Create a task named `load_data` to archive `transformed_data.txt` into a tar file named `weblog.tar`.
+
+**Screenshot:** [load_data.jpg]
+
+#### Task 6 - Define the task pipeline
+
+Define the task pipeline as per the provided details.
+
+**Screenshot:** [pipeline.jpg]
+
+### Exercise 3 - Getting the DAG operational
+
+Save the DAG you defined into a file named `process_web_log.py`.
+
+#### Task 7 - Submit the DAG
+
+Take a screenshot of the command you used and the output.
+
+**Screenshot:** [submit_dag.jpg]
+
+#### Task 8 - Unpause the DAG
+
+Take a screenshot of the command you used and the output.
+
+**Screenshot:** [unpause_dag.jpg]
+
+#### Task 9 - Monitor the DAG
+
+Take a screenshot of the DAG runs for the Airflow console.
+
+**Screenshot:** [dag_runs.jpg]
+
+End of the assignment.
+
 
 ## Big Data Analytics Platform - Spark
 ...
