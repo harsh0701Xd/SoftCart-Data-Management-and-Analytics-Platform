@@ -269,9 +269,43 @@ To automate the synchronization between the staging data warehouse (MySQL) and t
 - psycopg2 (for PostgreSQL)
 
 ### Exercise 1 - Retrieving last rowid from postgreSQL database
+
+```
+def get_last_rowid():
+    postgres_cursor.execute("SELECT MAX(rowid) FROM sales_data;")
+    last_rowid = postgres_cursor.fetchone()[0]
+    return last_rowid
+```
+
 ### Exercise 2 - Retrieving all records later than the last rowid from mysql database
-### Exercise 3 - Inserting all retrieved records into the postgreSQL database 
+
+```
+def get_latest_records(rowid):
+    mysql_cursor.execute("SELECT * FROM sales_data WHERE rowid > %s;", (rowid,))
+    new_records = mysql_cursor.fetchall()
+    return new_records
+```
+
+### Exercise 3 - Inserting all retrieved records into the postgreSQL database
+
+```
+def insert_records(records):
+    for record in records:
+        # Check if the number of columns in the record matches the number of columns in the MySQL table
+        if len(record) == 4:
+            # If the record has 4 columns, insert default values for price and timestamp
+            postgres_cursor.execute("INSERT INTO sales_data (rowid, product_id, customer_id, price, quantity, timestamp) VALUES (%s, %s, %s, 0.0, %s, current_timestamp);", record)
+        else:
+            # If the record has 5 columns, assume the price and timestamp values are provided and insert as is
+            postgres_cursor.execute("INSERT INTO sales_data (rowid, product_id, customer_id, price, quantity, timestamp) VALUES (%s, %s, %s, %s, %s, %s);", record)
+    postgres_connection.commit()
+```
+
 ### Exercise 4 - Running `automation.py` script for database synchronization
+
+```
+python automation.py
+```
 
 --- 
 
