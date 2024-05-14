@@ -7,7 +7,7 @@ Welcome to the documentation for the data platform architecture of SoftCart, an 
 - [Introduction](#introduction)
 - [OLTP Database - MySQL](#oltp-database---mysql)
 - [NoSQL Database - MongoDB](#nosql-database---mongodb)
-- [Staging Data Warehouse - PostgreSQL](#staging-data-warehouse---postgresql)
+- [Data Warehouse - PostgreSQL](#data-warehouse---postgresql)
 - [Business Intelligence Dashboard - IBM Cognos Analytics](#business-intelligence-dashboard---ibm-cognos-analytics)
 - [Data Pipelines - Apache Airflow](#data-pipelines---apache-airflow)
 - [Big Data Analytics Platform - Spark](#big-data-analytics-platform---spark)
@@ -128,7 +128,7 @@ SoftCart utilizes MongoDB as its NoSQL database to store e-commerce catalog data
 
 ---
 
-## Staging Data Warehouse - PostgreSQL
+## Data Warehouse - PostgreSQL
 
 ### Overview
 
