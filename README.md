@@ -313,7 +313,109 @@ python automation.py
 
 ## ETL Data Pipeline - Apache Airflow
 
-...
+### Overview
+
+This section outlines the process of creating a data pipeline using Apache AirFlow. The pipeline is designed to analyze a web server log file, extract specific lines and fields, transform the data, and load it into a tar file.
+
+### Tools/Software
+
+- Apache AirFlow
+
+### Exercise 1 - Define the DAG arguments
+
+- Define necessary arguments for Directed Acyclic Graph (DAG) in Airflow to orchestrate ETL tasks.
+
+  ```
+  default_args = {
+    'owner': 'airflow',
+    'start_date': days_ago(0),
+    'email': ['airflow@example.com'],
+    'email_on_failure': True,
+    'email_on_retry': True,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+  }
+  ```
+  
+### Exercise 2 - Define the DAG
+
+- Establish the DAG structure outlining data pipeline workflow in Airflow.
+
+  ```
+  dag = DAG(
+    dag_id='process_web_log',
+    schedule_interval=timedelta(days=1),
+    default_args=default_args,
+    description='A DAG to process web server log files daily',
+    )
+  ```
+
+### Exercise 3 - Create tasks to extract,transform and data
+
+- Create a task named `extract_data` to extract the `ipaddress` field from the web server log file and save it into a designated file named `extracted_data.txt`.
+
+  ```
+  def extract_data(input_file, output_file):
+    with open(input_file, "r") as infile:
+        data = infile.read()
+        ip_addresses = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', data)
+        with open(output_file, "w") as outfile:
+            for ip_address in ip_addresses:
+                outfile.write(ip_address + '\n')
+  ```
+
+- Create a task named `transform_data` to filter out all occurrences of a specified IP address from the `extracted_data.txt` file and save the transformed output to a new file named `transformed_data.txt`.
+
+  ```
+  def transform_data(input_file, output_file):
+    with open(input_file, "r") as infile:
+        transformed_lines = [line for line in infile if line.strip() != "198.46.149.143\n"]
+        with open(output_file, "w") as outfile:
+            outfile.writelines(transformed_lines)
+  ```
+  
+- Create a task named `load_data` to archive the transformed data file `transformed_data.txt` into a tar file named `weblog.tar`.
+
+  ```
+  def load_data():
+    os.system("tar -cvf /home/project/airflow/dags/capstone/weblog.tar /home/project/airflow/dags/capstone/transformed_data.txt")
+  ```
+
+### Exercise 4 - Define the task pipeline
+
+- Define the sequential flow of tasks to ensure smooth execution of the ETL process.
+
+  ```
+  extract_data_task = PythonOperator(
+    task_id='extract_data',
+    python_callable=extract_data,
+    dag=dag,
+  )
+
+  transform_data_task = PythonOperator(
+    task_id='transform_data',
+    python_callable=transform_data,
+    dag=dag,
+  )
+
+  load_data_task = PythonOperator(
+    task_id='load_data',
+    python_callable=load_data,
+    dag=dag,
+  )
+  ```
+  
+  ```
+  extract_data_task >> transform_data_task >> load_data_task
+  ```
+
+### Exercise - Submit DAG
+
+- Submit the configured DAG for execution within Airflow environment.
+
+### Exercise - Unpause DAG
+
+- Activate the DAG to initiate scheduled or triggered execution.
 
 ---
 
