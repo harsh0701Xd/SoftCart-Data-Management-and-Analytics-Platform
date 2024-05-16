@@ -409,15 +409,95 @@ This section outlines the process of creating a data pipeline using Apache AirFl
   extract_data_task >> transform_data_task >> load_data_task
   ```
 
-### Exercise - Submit DAG
+### Exercise 5 - Submit DAG
 
 - Submit the configured DAG for execution within Airflow environment.
 
-### Exercise - Unpause DAG
+### Exercise 6 - Unpause DAG
 
 - Activate the DAG to initiate scheduled or triggered execution.
 
 ---
 
 ## Big Data Analytics Platform - Spark
-...
+
+### Overview
+This section presents an example of performing big data analytics using Apache Spark with PySpark in a JupyterLab environment. The analysis includes loading and exploring search term data from the e-commerce platform and utilizing a pretrained sales forecasting model to predict sales for the year 2023.
+
+### Software/Tools
+- JupyterLab
+- PySpark
+
+### Exercise 1 - Installing PySpark
+
+- Installation of PySpark and findspark libraries for working with Apache Spark.
+
+  ```
+   !pip install pyspark
+   !pip install findspark
+  ```
+
+### Exercise 2 - Creating Spark Session and Context
+  
+- Initializing Spark context and session for data processing.
+
+  ```
+  import findspark
+  findspark.init()
+
+  from pyspark import SparkContext, SparkConf
+  from pyspark.sql import SparkSession
+  ```
+
+### Exercise 3 - Loading and Analyzing Search Terms
+
+- Loading search term data into a Spark DataFrame, exploring data characteristics, and performing basic analysis tasks such as counting search occurrences and identifying the top search terms.
+
+  ```
+  # Load search term data into a Spark DataFrame
+  src = 'searchterms.csv'
+  search_term_dataset = spark.read.csv(src)
+
+  # Displaying number of rows and columns
+  row_count = search_term_dataset.count()
+  col_count = len(search_term_dataset.columns)
+  print(f'Row count for search_term_dataset: {row_count}')
+  print(f'Column count for search_term_dataset: {col_count}')
+
+  # Displaying the first 5 rows of the dataset
+  search_term_dataset.show(5)
+
+  # Performing analysis tasks
+  search_term_dataset.createOrReplaceTempView('searches')
+
+  # Count occurrences of a specific search term
+  spark.sql('SELECT COUNT(*) FROM searches WHERE _c3="gaming laptop"').show()
+
+  # Identifying top 5 most frequently used search terms
+  spark.sql('SELECT _c3, COUNT(_c3) FROM searches GROUP BY _c3 ORDER BY COUNT(_c3) DESC').show(5)
+  ```
+
+### Exercise 4 - Sales Forecasting Model
+
+- Utilizing a pretrained sales forecasting model to predict sales for the year 2023.
+
+  ```
+  # Load pretrained sales forecasting model
+  from pyspark.ml.regression import LinearRegressionModel
+  sales_prediction_model = LinearRegressionModel.load('sales_prediction.model')
+
+  # Predict sales for the year 2023
+  from pyspark.ml.feature import VectorAssembler
+  def predict(year):
+      assembler = VectorAssembler(inputCols=["year"],outputCol="features")
+      data = [[year,0]]
+      columns = ["year", "sales"]
+      _ = spark.createDataFrame(data, columns)
+      __ = assembler.transform(_).select('features','sales')
+      predictions = sales_prediction_model.transform(__)
+      predictions.select('prediction').show()
+      # Perform prediction
+      predict(2023)
+  ```
+  
+---
